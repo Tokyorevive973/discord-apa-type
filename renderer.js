@@ -2,8 +2,9 @@
 const WebSocket = require('ws');
 
 const PORT = 3000;
-const ws = new WebSocket("ws://localhost:3000");
 
+// Szerver létrehozása
+const wss = new WebSocket.Server({ port: PORT });
 
 let clients = [];
 
@@ -14,6 +15,7 @@ wss.on('connection', (ws, req) => {
 
   clients.push({ ws, ip, port });
 
+  // Üzenetek fogadása
   ws.on('message', message => {
     let msg;
     try {
@@ -24,11 +26,11 @@ wss.on('connection', (ws, req) => {
     }
 
     if(msg.type === "chat"){
-      // Adjunk hozzá IP-t és portot a payloadhoz
+      // IP és port hozzáadása a payloadhoz
       msg.payload.ip = ip;
       msg.payload.port = port;
 
-      // Küldjük minden kliensnek
+      // Üzenet kiküldése minden kliensnek
       clients.forEach(c => {
         if(c.ws.readyState === WebSocket.OPEN){
           c.ws.send(JSON.stringify(msg));
@@ -39,6 +41,7 @@ wss.on('connection', (ws, req) => {
     }
   });
 
+  // Kliens leválasztása
   ws.on('close', () => {
     console.log(`Kliens lecsatlakozott: ${ip}:${port}`);
     clients = clients.filter(c => c.ws !== ws);
@@ -46,5 +49,3 @@ wss.on('connection', (ws, req) => {
 });
 
 console.log(`WebSocket szerver fut a ${PORT}-as porton (publikus IP: 178.164.248.76)`);
-
-
