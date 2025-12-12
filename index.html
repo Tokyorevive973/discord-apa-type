@@ -6,23 +6,34 @@
 <style>
 * { box-sizing:border-box; margin:0; padding:0; }
 body { font-family:"Segoe UI",sans-serif; display:flex; height:100vh; background:#36393f; color:white; }
+/* Sidebar */
 .sidebar { width:250px; background:#2f3136; padding:20px; display:flex; flex-direction:column; }
 .sidebar h2 { font-size:1.5rem; margin-bottom:20px; color:white; }
 .sidebar p { padding:10px; border-radius:6px; cursor:pointer; transition:0.2s; }
 .sidebar p:hover { background:#40444b; }
+/* Messages panel */
 .messages { flex:1; padding:20px; overflow-y:auto; display:flex; flex-direction:column; gap:10px; }
 .message { background:#40444b; padding:10px 15px; border-radius:12px; max-width:70%; word-wrap:break-word; box-shadow:0 2px 5px rgba(0,0,0,0.3); }
 .message b { color:#00b0f4; }
+/* Input bar */
 .input-bar { display:flex; padding:15px; background:#2f3136; border-top:1px solid #202225; }
 .input-bar input, .input-bar button { padding:10px; border-radius:8px; border:none; outline:none; font-size:1rem; }
 #name { width:130px; margin-right:10px; background:#40444b; color:white; }
 #text { flex:1; margin-right:10px; background:#40444b; color:white; }
 #send { background:#7289da; color:white; cursor:pointer; transition:0.2s; }
 #send:hover { background:#5b6eae; }
+/* Scrollbar modernizálás */
 .messages::-webkit-scrollbar { width:8px; }
 .messages::-webkit-scrollbar-thumb { background:#7289da; border-radius:4px; }
 .messages::-webkit-scrollbar-track { background:#2f3136; }
-@media(max-width:768px){body{flex-direction:column} .sidebar{width:100%; flex-direction:row; overflow-x:auto;} .messages{flex:1; padding:10px;} .input-bar{flex-direction:column;} #name,#text,#send{margin:5px 0; width:100%;}}
+/* Mobilbarát */
+@media(max-width:768px){
+  body{flex-direction:column;}
+  .sidebar{width:100%; flex-direction:row; overflow-x:auto;}
+  .messages{flex:1; padding:10px;}
+  .input-bar{flex-direction:column;}
+  #name,#text,#send{margin:5px 0; width:100%;}
+}
 </style>
 </head>
 <body>
@@ -43,13 +54,17 @@ body { font-family:"Segoe UI",sans-serif; display:flex; height:100vh; background
   <script>
     // Automatikus protokoll váltás: HTTPS → WSS, HTTP → WS
     const wsProtocol = location.protocol === "https:" ? "wss:" : "ws:";
-    const wsHost = "178.164.248.76:3000"; // TE publikus IP-d
+    const wsHost = "178.164.248.76:3000"; // publikus IP
     const ws = new WebSocket(`${wsProtocol}//${wsHost}`);
 
     const messages = document.getElementById("messages");
     const nameEl = document.getElementById("name");
     const textEl = document.getElementById("text");
     const sendBtn = document.getElementById("send");
+
+    ws.onopen = () => {
+      console.log("Kapcsolat létrejött a szerverrel!");
+    };
 
     ws.onmessage = (event) => {
       const msg = JSON.parse(event.data);
@@ -62,8 +77,15 @@ body { font-family:"Segoe UI",sans-serif; display:flex; height:100vh; background
       }
     };
 
+    ws.onerror = (err) => console.error("WebSocket hiba:", err);
+
     sendBtn.onclick = () => {
+      if(ws.readyState !== WebSocket.OPEN){
+        alert("A WebSocket kapcsolat még nem nyílt meg!");
+        return;
+      }
       if(!textEl.value) return;
+
       const payload = { name: nameEl.value || "Ismeretlen", text: textEl.value };
       ws.send(JSON.stringify({ type:"chat", payload }));
       textEl.value = "";
