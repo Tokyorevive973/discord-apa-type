@@ -1,157 +1,160 @@
 <!DOCTYPE html>
-<html>
+<html lang="hu">
 <head>
-  <meta charset="utf-8" />
+  <meta charset="UTF-8">
   <title>Discord Clone</title>
-/* ---------- Alapbeállítások ---------- */
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
 
-body {
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  display: flex;
-  height: 100vh;
-  background-color: #36393f;
-  color: #ffffff;
-}
+  <style>
+    /* ---------- Alapbeállítások ---------- */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-/* ---------- Sidebar ---------- */
-.sidebar {
-  width: 250px;
-  background-color: #2f3136;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-}
+    body {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      display: flex;
+      height: 100vh;
+      background-color: #36393f;
+      color: #ffffff;
+    }
 
-.sidebar h2 {
-  font-size: 1.5rem;
-  margin-bottom: 20px;
-}
+    /* ---------- Sidebar ---------- */
+    .sidebar {
+      width: 250px;
+      background-color: #2f3136;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+    }
 
-.sidebar p {
-  padding: 10px;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background 0.2s;
-}
+    .sidebar h2 {
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+    }
 
-.sidebar p:hover {
-  background-color: #40444b;
-}
+    .sidebar p {
+      padding: 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
 
-/* ---------- Messages panel ---------- */
-.messages {
-  flex: 1;
-  padding: 20px;
-  background-color: #36393f;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
+    .sidebar p:hover {
+      background-color: #40444b;
+    }
 
-.message {
-  background-color: #40444b;
-  padding: 10px 15px;
-  border-radius: 12px;
-  max-width: 70%;
-  word-wrap: break-word;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.3);
-}
+    /* ---------- Messages panel ---------- */
+    .messages {
+      flex: 1;
+      padding: 20px;
+      background-color: #36393f;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
 
-.message b {
-  color: #00b0f4;
-}
+    .message {
+      background-color: #40444b;
+      padding: 10px 15px;
+      border-radius: 12px;
+      max-width: 70%;
+      word-wrap: break-word;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+    }
 
-/* ---------- Input bar ---------- */
-.input-bar {
-  display: flex;
-  padding: 15px;
-  background-color: #2f3136;
-  border-top: 1px solid #202225;
-}
+    .message b {
+      color: #00b0f4;
+    }
 
-.input-bar input, .input-bar button {
-  padding: 10px 15px;
-  border-radius: 8px;
-  border: none;
-  outline: none;
-  font-size: 1rem;
-}
+    /* ---------- Input bar ---------- */
+    .input-bar {
+      display: flex;
+      padding: 15px;
+      background-color: #2f3136;
+      border-top: 1px solid #202225;
+    }
 
-#name {
-  width: 130px;
-  margin-right: 10px;
-  background-color: #40444b;
-  color: #ffffff;
-}
+    .input-bar input, .input-bar button {
+      padding: 10px 15px;
+      border-radius: 8px;
+      border: none;
+      outline: none;
+      font-size: 1rem;
+    }
 
-#text {
-  flex: 1;
-  margin-right: 10px;
-  background-color: #40444b;
-  color: #ffffff;
-}
+    #name {
+      width: 130px;
+      margin-right: 10px;
+      background-color: #40444b;
+      color: #ffffff;
+    }
 
-#send {
-  background-color: #7289da;
-  color: #ffffff;
-  cursor: pointer;
-  transition: background 0.2s;
-}
+    #text {
+      flex: 1;
+      margin-right: 10px;
+      background-color: #40444b;
+      color: #ffffff;
+    }
 
-#send:hover {
-  background-color: #5b6eae;
-}
+    #send {
+      background-color: #7289da;
+      color: #ffffff;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
 
-/* ---------- Scrollbar modernizálás ---------- */
-.messages::-webkit-scrollbar {
-  width: 8px;
-}
+    #send:hover {
+      background-color: #5b6eae;
+    }
 
-.messages::-webkit-scrollbar-thumb {
-  background-color: #7289da;
-  border-radius: 4px;
-}
+    /* ---------- Scrollbar modernizálás ---------- */
+    .messages::-webkit-scrollbar {
+      width: 8px;
+    }
 
-.messages::-webkit-scrollbar-track {
-  background-color: #2f3136;
-}
+    .messages::-webkit-scrollbar-thumb {
+      background-color: #7289da;
+      border-radius: 4px;
+    }
 
-/* ---------- Reszponzív mobil ---------- */
-@media (max-width: 768px) {
-  body {
-    flex-direction: column;
-  }
+    .messages::-webkit-scrollbar-track {
+      background-color: #2f3136;
+    }
 
-  .sidebar {
-    width: 100%;
-    flex-direction: row;
-    overflow-x: auto;
-  }
+    /* ---------- Reszponzív mobil ---------- */
+    @media (max-width: 768px) {
+      body {
+        flex-direction: column;
+      }
 
-  .sidebar h2 {
-    margin-right: 20px;
-  }
+      .sidebar {
+        width: 100%;
+        flex-direction: row;
+        overflow-x: auto;
+      }
 
-  .messages {
-    flex: 1;
-    padding: 10px;
-  }
+      .sidebar h2 {
+        margin-right: 20px;
+      }
 
-  .input-bar {
-    flex-direction: column;
-  }
+      .messages {
+        flex: 1;
+        padding: 10px;
+      }
 
-  #name, #text, #send {
-    margin: 5px 0;
-    width: 100%;
-  }
-}
+      .input-bar {
+        flex-direction: column;
+      }
+
+      #name, #text, #send {
+        margin: 5px 0;
+        width: 100%;
+      }
+    }
+  </style>
 
 </head>
 
@@ -175,4 +178,3 @@ body {
   <script src="renderer.js"></script>
 </body>
 </html>
-
