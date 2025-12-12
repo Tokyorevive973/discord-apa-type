@@ -2,7 +2,8 @@
 const WebSocket = require('ws');
 
 const PORT = 3000;
-const wss = new WebSocket.Server({ "ws://localhost:3000"});
+const ws = new WebSocket("ws://localhost:3000");
+
 
 let clients = [];
 
@@ -45,4 +46,5 @@ wss.on('connection', (ws, req) => {
 });
 
 console.log(`WebSocket szerver fut a ${PORT}-as porton (publikus IP: 178.164.248.76)`);
+
 
